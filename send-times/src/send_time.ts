@@ -55,9 +55,18 @@ export class send_time{
         console.log("start time", this.start_time)
         console.log("end time", this.end_time)
         console.log("elapsed time", this.get_elapsed_time())
+        this.check_break_time(2);
     }
     private get_elapsed_time(): number{
         if(this.start_time >= this.end_time)return 0;
-        return this.end_time - this.start_time;
+        //秒で返す
+        return (this.end_time - this.start_time)/1000;
+    }
+
+    private check_break_time(interval: number): void{
+        if(this.get_elapsed_time() >= interval){
+            vscode.window.showInformationMessage("take a break");
+            this.isCoding = false;
+        }
     }
 }
