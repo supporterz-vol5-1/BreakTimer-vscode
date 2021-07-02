@@ -60,6 +60,10 @@ class send_time {
         }
         console.log("start time", this.start_time);
         console.log("end time", this.end_time);
+        console.log("elapsed time", this.get_elapsed_time());
+    }
+    get_elapsed_time() {
+        return this.end_time - this.start_time;
     }
 }
 exports.send_time = send_time;

@@ -55,5 +55,9 @@ export class send_time{
         }
         console.log("start time", this.start_time)
         console.log("end time", this.end_time)
+        console.log("elapsed time", this.get_elapsed_time())
+    }
+    private get_elapsed_time(): number{
+        return this.end_time - this.start_time;
     }
 }
