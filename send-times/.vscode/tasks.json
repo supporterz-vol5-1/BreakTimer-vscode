@@ -7,8 +7,8 @@
 			"type": "npm",
 			"script": "watch",
 			"problemMatcher": [
-                "$ts-webpack-watch",
-                "$tslint-webpack-watch"
+				"$ts-webpack-watch",
+				"$tslint-webpack-watch"
 			],
 			"isBackground": true,
 			"presentation": {
@@ -28,6 +28,21 @@
 				"reveal": "never"
 			},
 			"group": "build"
+		},
+		{
+			"type": "npm",
+			"script": "compile",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: compile",
+			"detail": "webpack"
+		},
+		{
+			"type": "npm",
+			"script": "install",
+			"problemMatcher": [],
+			"label": "npm: install",
+			"detail": "install dependencies from package"
 		}
 	]
 }
