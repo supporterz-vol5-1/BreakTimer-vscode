@@ -6,6 +6,7 @@ export class send_time{
     private file_type: string = "";
     private disposable!: vscode.Disposable;
     private isCoding: boolean = false;
+    private breakTime: number[] = [];
     /*
     constructor(centext: vscode.ExtensionContext){
         this.context = context;
@@ -35,8 +36,15 @@ export class send_time{
         this.onEvent(true);
     }
     */
+   private update_end_time():void{
+       this.end_time = Date.now();
+   }
     private checkBreak(): void{
-        this.check_break_time(2);
+        this.update_end_time()
+        if(this.check_break_time(2)){
+            this.breakTime.push(this.get_elapsed_time());
+            console.log(this.breakTime)
+        }
         console.log("elapsed time", this.get_elapsed_time())
     }
 
@@ -55,13 +63,13 @@ export class send_time{
                     this.isCoding = true;
                 }
                 else if(this.isCoding){
-                    this.end_time = Date.now();
+                    this.update_end_time()
                 }
             }
         }
         console.log("start time", this.start_time)
         console.log("end time", this.end_time)
-        //console.log("elapsed time", this.get_elapsed_time())
+        console.log("elapsed time", this.get_elapsed_time())
         //this.check_break_time(2);
     }
     private get_elapsed_time(): number{
@@ -70,10 +78,14 @@ export class send_time{
         return (this.end_time - this.start_time)/1000;
     }
 
-    private check_break_time(interval: number): void{
+    private check_break_time(interval: number): boolean{
         if(this.get_elapsed_time() >= interval){
             vscode.window.showInformationMessage("take a break");
             this.isCoding = false;
+            return true;
+        }
+        else{
+            return false;
         }
     }
 }

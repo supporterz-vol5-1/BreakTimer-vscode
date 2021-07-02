@@ -21,6 +21,7 @@ class send_time {
         this.end_time = 0;
         this.file_type = "";
         this.isCoding = false;
+        this.breakTime = [];
     }
     /*
     constructor(centext: vscode.ExtensionContext){
@@ -48,8 +49,15 @@ class send_time {
         this.onEvent(true);
     }
     */
+    update_end_time() {
+        this.end_time = Date.now();
+    }
     checkBreak() {
-        this.check_break_time(2);
+        this.update_end_time();
+        if (this.check_break_time(2)) {
+            this.breakTime.push(this.get_elapsed_time());
+            console.log(this.breakTime);
+        }
         console.log("elapsed time", this.get_elapsed_time());
     }
     onEvent(isWrite) {
@@ -67,13 +75,13 @@ class send_time {
                     this.isCoding = true;
                 }
                 else if (this.isCoding) {
-                    this.end_time = Date.now();
+                    this.update_end_time();
                 }
             }
         }
         console.log("start time", this.start_time);
         console.log("end time", this.end_time);
-        //console.log("elapsed time", this.get_elapsed_time())
+        console.log("elapsed time", this.get_elapsed_time());
         //this.check_break_time(2);
     }
     get_elapsed_time() {
@@ -86,6 +94,10 @@ class send_time {
         if (this.get_elapsed_time() >= interval) {
             vscode.window.showInformationMessage("take a break");
             this.isCoding = false;
+            return true;
+        }
+        else {
+            return false;
         }
     }
 }
