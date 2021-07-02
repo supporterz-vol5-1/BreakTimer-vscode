@@ -3,18 +3,12 @@
 /******/ 	var __webpack_modules__ = ([
 /* 0 */,
 /* 1 */
-/***/ ((module) => {
-
-module.exports = require("vscode");
-
-/***/ }),
-/* 2 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.send_time = void 0;
-const vscode = __webpack_require__(1);
+const vscode = __webpack_require__(2);
 class send_time {
     constructor() {
         this.start_time = 0;
@@ -63,6 +57,12 @@ class send_time {
 exports.send_time = send_time;
 
 
+/***/ }),
+/* 2 */
+/***/ ((module) => {
+
+module.exports = require("vscode");
+
 /***/ })
 /******/ 	]);
 /************************************************************************/
@@ -98,7 +98,7 @@ var exports = __webpack_exports__;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.deactivate = exports.activate = void 0;
-const send_time_1 = __webpack_require__(2);
+const send_time_1 = __webpack_require__(1);
 var application;
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
