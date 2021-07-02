@@ -37,14 +37,20 @@ class send_time {
         let subscription = [];
         vscode.window.onDidChangeTextEditorSelection(this.onChange, this, subscription);
         vscode.window.onDidChangeActiveTextEditor(this.onChange, this, subscription);
-        vscode.workspace.onDidSaveTextDocument(this.onSave, this, subscription);
+        vscode.workspace.onDidSaveTextDocument(this.checkBreak, this, subscription);
         this.disposable = vscode.Disposable.from(...subscription);
     }
     onChange() {
         this.onEvent(false);
     }
-    onSave() {
+    /*
+    private onSave(): void{
         this.onEvent(true);
+    }
+    */
+    checkBreak() {
+        this.check_break_time(2);
+        console.log("elapsed time", this.get_elapsed_time());
     }
     onEvent(isWrite) {
         let editor = vscode.window.activeTextEditor;
@@ -65,8 +71,8 @@ class send_time {
         }
         console.log("start time", this.start_time);
         console.log("end time", this.end_time);
-        console.log("elapsed time", this.get_elapsed_time());
-        this.check_break_time(2);
+        //console.log("elapsed time", this.get_elapsed_time())
+        //this.check_break_time(2);
     }
     get_elapsed_time() {
         if (this.start_time >= this.end_time)
