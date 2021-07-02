@@ -12,7 +12,6 @@ export class send_time{
     }
     */
     public init(): void{
-        console.log('initialized!!')
         this.get_editor_event();
     }
 
@@ -58,6 +57,7 @@ export class send_time{
         console.log("elapsed time", this.get_elapsed_time())
     }
     private get_elapsed_time(): number{
+        if(this.start_time >= this.end_time)return 0;
         return this.end_time - this.start_time;
     }
 }
