@@ -14,6 +14,7 @@ class send_time {
         this.start_time = 0;
         this.end_time = 0;
         this.file_type = "";
+        this.isCoding = false;
     }
     /*
     constructor(centext: vscode.ExtensionContext){
@@ -46,12 +47,18 @@ class send_time {
             let doc = editor.document;
             if (doc) {
                 let file = doc.fileName;
-                if (file) {
+                console.log(file);
+                if (file && !this.isCoding) {
                     this.start_time = Date.now();
+                    this.isCoding = true;
+                }
+                else if (this.isCoding) {
+                    this.end_time = Date.now();
                 }
             }
         }
-        console.log(this.start_time);
+        console.log("start time", this.start_time);
+        console.log("end time", this.end_time);
     }
 }
 exports.send_time = send_time;

@@ -5,6 +5,7 @@ export class send_time{
     private end_time: number = 0;
     private file_type: string = "";
     private disposable!: vscode.Disposable;
+    private isCoding: boolean = false;
     /*
     constructor(centext: vscode.ExtensionContext){
         this.context = context;
@@ -41,11 +42,17 @@ export class send_time{
             let doc = editor.document;
             if(doc){
                 let file: string = doc.fileName;
-                if(file){
-                    this.start_time = Date.now()
+                console.log(file)
+                if(file && !this.isCoding){
+                    this.start_time = Date.now();
+                    this.isCoding = true;
+                }
+                else if(this.isCoding){
+                    this.end_time = Date.now();
                 }
             }
         }
-        console.log(this.start_time)
+        console.log("start time", this.start_time)
+        console.log("end time", this.end_time)
     }
 }
