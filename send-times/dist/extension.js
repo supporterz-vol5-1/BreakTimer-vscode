@@ -59,7 +59,9 @@ class send_time {
             if (doc) {
                 let file = doc.fileName;
                 // console.log(file.split("/").reverse()[0].split(".")[1])
-                this.file_type = file.split("/").reverse()[0].split(".")[1];
+                // ファイルがからの時だけ拡張子を入手する
+                if (!this.file_type)
+                    this.file_type = file.split("/").reverse()[0].split(".")[1];
                 if (file && !this.isCoding) {
                     this.start_time = Date.now();
                     this.isCoding = true;
