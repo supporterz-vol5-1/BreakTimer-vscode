@@ -4,6 +4,7 @@ export class send_time{
     private start_time: number = 0;
     private end_time: number = 0;
     private file_type: string = "";
+    private file_name: string = "";
     private disposable!: vscode.Disposable;
     private isCoding: boolean = false;
     // private breakTime: number[] = [];
@@ -54,8 +55,9 @@ export class send_time{
         //vscode.workspace.onDidOpenTextDocument(this.send_data, this, subscription)
         this.disposable = vscode.Disposable.from(...subscription)
     }
-    private set_file_type(file_type: string){
+    private set_file_type(file_name: string, file_type: string){
         this.send_data()
+        this.file_name = file_name;
         this.file_type = file_type;
     }
     //送るデータ
@@ -74,7 +76,7 @@ export class send_time{
     private onChange(): void{
         this.onEvent(false);
     }
-    
+
     private update_start_time(): void{
         this.start_time = Date.now();
     }
@@ -97,10 +99,10 @@ export class send_time{
         if(editor){
             let doc = editor.document;
             if(doc){
-                let file: string = doc.fileName;
-                let type: string = file.split("/").reverse()[0].split(".")[1]
-                if(type != this.file_type){
-                    this.set_file_type(type);
+                let file: string = doc.fileName.split("/").reverse()[0];
+                let type: string = file.split(".")[1]
+                if(file != this.file_name){
+                    this.set_file_type(file, type);
                 }
                 //console.log(this.file_type)
                 if(file && !this.isCoding){

@@ -29,6 +29,7 @@ class send_time {
         this.start_time = 0;
         this.end_time = 0;
         this.file_type = "";
+        this.file_name = "";
         this.isCoding = false;
         // private breakTime: number[] = [];
         this.username = "";
@@ -78,8 +79,9 @@ class send_time {
         //vscode.workspace.onDidOpenTextDocument(this.send_data, this, subscription)
         this.disposable = vscode.Disposable.from(...subscription);
     }
-    set_file_type(file_type) {
+    set_file_type(file_name, file_type) {
         this.send_data();
+        this.file_name = file_name;
         this.file_type = file_type;
     }
     //送るデータ
@@ -117,10 +119,10 @@ class send_time {
         if (editor) {
             let doc = editor.document;
             if (doc) {
-                let file = doc.fileName;
-                let type = file.split("/").reverse()[0].split(".")[1];
-                if (type != this.file_type) {
-                    this.set_file_type(type);
+                let file = doc.fileName.split("/").reverse()[0];
+                let type = file.split(".")[1];
+                if (file != this.file_name) {
+                    this.set_file_type(file, type);
                 }
                 //console.log(this.file_type)
                 if (file && !this.isCoding) {
