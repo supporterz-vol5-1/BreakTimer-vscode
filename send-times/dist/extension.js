@@ -56,6 +56,33 @@ class send_time {
     init() {
         this.get_editor_event();
     }
+    register_user() {
+        return __awaiter(this, void 0, void 0, function* () {
+            var new_user = "";
+            const register_usr = yield vscode.window.showInputBox({
+                prompt: "登録するユーザーネームを入力してください"
+            });
+            if (register_usr) {
+                //console.log(register_usr);
+                new_user = register_usr;
+            }
+            else {
+                vscode.window.showWarningMessage("failed to get");
+            }
+            const url = base_url + "api/register/" + register_usr;
+            console.log(url);
+            axios.get(url).then((res) => {
+                console.log("authenticated");
+                console.log(res);
+                this.token = res.token;
+                this.username = new_user;
+            }).catch((err) => {
+                //これをウィンドウでだしたいな
+                console.log('error');
+                console.log(err);
+            });
+        });
+    }
     user_auth(set_interval) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("please log in!");
@@ -4103,6 +4130,9 @@ function activate(context) {
     }));
     context.subscriptions.push(vscode.commands.registerCommand("send-times.set_interval", function () {
         application.set_interval_time();
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand("send-times.register", function () {
+        application.register_user();
     }));
     context.subscriptions.push(application);
     application.user_auth(true);
