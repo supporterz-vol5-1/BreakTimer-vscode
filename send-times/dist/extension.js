@@ -37,6 +37,7 @@ class send_time {
         // private breakTime: number[] = [];
         this.username = "";
         this.password = "";
+        this.interval_time = 0;
         this.dict = {
             "c": "c",
             "cpp": "c++",
@@ -78,6 +79,20 @@ class send_time {
             //console.log(this.username)
             //console.log(this.password)
             //ユーザー認証処理をする
+            this.set_interval_time();
+        });
+    }
+    set_interval_time() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const time = yield vscode.window.showInputBox({
+                prompt: "どのくらい作業しますか？"
+            });
+            if (time) {
+                this.interval_time = Number(time);
+            }
+            else {
+                vscode.window.showWarningMessage('failed to get');
+            }
         });
     }
     dispose() {
@@ -135,7 +150,7 @@ class send_time {
     }
     checkBreak() {
         this.update_end_time();
-        if (this.check_break_time(2)) {
+        if (this.check_break_time(this.interval_time)) {
             vscode.window.showInformationMessage("take a break");
             //this.breakTime.push(this.get_elapsed_time());
             //console.log(this.breakTime)
@@ -4034,9 +4049,6 @@ var exports = __webpack_exports__;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.deactivate = exports.activate = void 0;
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-const vscode = __webpack_require__(1);
 const send_time_1 = __webpack_require__(2);
 var application;
 // this method is called when your extension is activated
@@ -4050,14 +4062,9 @@ function activate(context) {
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with registerCommand
     // The commandId parameter must match the command field in package.json
-    let disposable = vscode.commands.registerCommand('send-times.helloWorld', () => {
-        // The code you place here will be executed every time your command is executed
-        // Display a message box to the user
-        vscode.window.showInformationMessage('Hello World Vscode');
-    });
-    context.subscriptions.push(disposable);
     context.subscriptions.push(application);
     application.user_auth();
+    //application.set_interval_time();
     application.init();
 }
 exports.activate = activate;

@@ -12,6 +12,7 @@ export class send_time{
     // private breakTime: number[] = [];
     private username: string = "";
     private password: string = "";
+    private interval_time: number = 0;
     private dict:{[index:string]: string} = {
         "c": "c",
         "cpp": "c++",
@@ -51,6 +52,20 @@ export class send_time{
         //console.log(this.username)
         //console.log(this.password)
         //ユーザー認証処理をする
+
+        this.set_interval_time();
+    }
+
+    public async set_interval_time():Promise<void>{
+        const time = await vscode.window.showInputBox({
+            prompt: "どのくらい作業しますか？"
+        });
+        if(time){
+            this.interval_time = Number(time);
+        }
+        else{
+            vscode.window.showWarningMessage('failed to get')
+        }
     }
 
     public dispose(): void{
@@ -112,7 +127,7 @@ export class send_time{
    }
     private checkBreak(): void{
         this.update_end_time()
-        if(this.check_break_time(2)){
+        if(this.check_break_time(this.interval_time)){
             vscode.window.showInformationMessage("take a break");
             //this.breakTime.push(this.get_elapsed_time());
             //console.log(this.breakTime)
