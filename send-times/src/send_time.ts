@@ -76,14 +76,17 @@ export class send_time{
 
     private get_editor_event(): void{
         let subscription: vscode.Disposable[] = [];
-        vscode.window.onDidChangeTextEditorSelection(this.onChange, this, subscription)
-        vscode.window.onDidChangeActiveTextEditor(this.onChange, this, subscription)
+        vscode.window.onDidChangeTextEditorSelection(this.onEvent, this, subscription)
+        vscode.window.onDidChangeActiveTextEditor(this.onEvent, this, subscription)
         vscode.workspace.onDidSaveTextDocument(this.checkBreak, this, subscription)
         //TODO: ファイルを閉じた時に時間をDBに送りたい
         this.disposable = vscode.Disposable.from(...subscription)
     }
+    //ファイル名とファイルタイプを更新する
     private set_file_type(file_name: string, file_type: string){
+        //更新前の作業ログをDBに送る
         this.send_data()
+        //更新する
         this.file_name = file_name;
         this.file_type = file_type;
     }
@@ -111,10 +114,7 @@ export class send_time{
             console.log(url)
             //axios.post(url, args)
         }
-    }
-
-    private onChange(): void{
-        this.onEvent(false);
+        this.isCoding = false;
     }
 
     private update_start_time(): void{
@@ -124,6 +124,7 @@ export class send_time{
    private update_end_time():void{
        this.end_time = Date.now();
    }
+   //ファイルが保存された時，作業時間の評価をする
     private checkBreak(): void{
         this.update_end_time()
         if(this.check_break_time(this.interval_time)){
@@ -133,8 +134,8 @@ export class send_time{
         }
         console.log("elapsed time", this.get_elapsed_time())
     }
-
-    private onEvent(isWrite: boolean): void{
+    //文字が入力された時とか，エディタ側で操作した時に実行される
+    private onEvent(): void{
         let editor = vscode.window.activeTextEditor;
         if(editor){
             let doc = editor.document;
@@ -142,12 +143,16 @@ export class send_time{
                 let file: string = doc.fileName.split("/").reverse()[0];
                 let type: string = file.split(".")[1]
                 type = this.dict[type]
+                //ファイル名が変化した時，作業していたファイルを閉じたとして
+                //DBに作業時間をポストする
                 if(file != this.file_name){
+                    //ファイル名と種類を更新する
                     this.set_file_type(file, type);
                 }
                 //console.log(this.file_type)
                 if(file && !this.isCoding){
-                    this.start_time = Date.now();
+                    //this.start_time = Date.now();
+                    this.update_start_time()
                     this.isCoding = true;
                 }
                 else if(this.isCoding){
