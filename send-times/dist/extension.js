@@ -30,7 +30,7 @@ class send_time {
         this.end_time = 0;
         this.file_type = "";
         this.isCoding = false;
-        this.breakTime = [];
+        // private breakTime: number[] = [];
         this.username = "";
         this.password = "";
     }
@@ -75,15 +75,30 @@ class send_time {
         //TODO: ファイルを閉じた時に時間をDBに送りたい
         //vscode.window.onDidChangeVisibleTextEditors(this.send_data, this, subscription)
         //console.log(vscode.window.visibleTextEditors)
-        vscode.window.onDidChangeTextEditorSelection(this.send_data, this, subscription);
+        //vscode.workspace.onDidOpenTextDocument(this.send_data, this, subscription)
         this.disposable = vscode.Disposable.from(...subscription);
+    }
+    set_file_type(file_type) {
+        this.send_data();
+        this.file_type = file_type;
     }
     //送るデータ
     // 作業時間，フィアルの内容，ユーザー名
     send_data() {
+        const time = this.get_elapsed_time();
+        if (time != 0) {
+            console.log("file has changed");
+            console.log(time);
+            console.log(this.username);
+            console.log(this.file_type);
+            this.update_start_time();
+        }
     }
     onChange() {
         this.onEvent(false);
+    }
+    update_start_time() {
+        this.start_time = Date.now();
     }
     update_end_time() {
         this.end_time = Date.now();
@@ -91,8 +106,9 @@ class send_time {
     checkBreak() {
         this.update_end_time();
         if (this.check_break_time(2)) {
-            this.breakTime.push(this.get_elapsed_time());
-            console.log(this.breakTime);
+            vscode.window.showInformationMessage("take a break");
+            //this.breakTime.push(this.get_elapsed_time());
+            //console.log(this.breakTime)
         }
         console.log("elapsed time", this.get_elapsed_time());
     }
@@ -102,8 +118,9 @@ class send_time {
             let doc = editor.document;
             if (doc) {
                 let file = doc.fileName;
-                if (!this.file_type) {
-                    this.file_type = file.split("/").reverse()[0].split(".")[1];
+                let type = file.split("/").reverse()[0].split(".")[1];
+                if (type != this.file_type) {
+                    this.set_file_type(type);
                 }
                 //console.log(this.file_type)
                 if (file && !this.isCoding) {
@@ -127,8 +144,6 @@ class send_time {
     }
     check_break_time(interval) {
         if (this.get_elapsed_time() >= interval) {
-            vscode.window.showInformationMessage("take a break");
-            this.isCoding = false;
             return true;
         }
         else {
