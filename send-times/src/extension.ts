@@ -14,14 +14,20 @@ export function activate(context: vscode.ExtensionContext) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	// let disposable = vscode.commands.registerCommand('send-times.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		//vscode.window.showInformationMessage('Hello World Vscode');
-	// });
-	context.subscriptions.push(application)
-	application.init()
-	// context.subscriptions.push(disposable);
+	context.subscriptions.push(
+		vscode.commands.registerCommand("send-times.login", function (){
+			application.user_auth(false);
+		})
+	)
+	context.subscriptions.push(
+		vscode.commands.registerCommand("send-times.set_interval", function (){
+			application.set_interval_time();
+		})
+	)
+	context.subscriptions.push(application);
+	application.user_auth(true);
+	//application.set_interval_time();
+	application.init();
 }
 
 // this method is called when your extension is deactivated
