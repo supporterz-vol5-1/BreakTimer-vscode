@@ -11,7 +11,6 @@ export class send_time{
     private password: string = "";
 
     public init(): void{
-        //this.user_auth();
         this.get_editor_event();
     }
 
@@ -54,11 +53,7 @@ export class send_time{
     private onChange(): void{
         this.onEvent(false);
     }
-    /*
-    private onSave(): void{
-        this.onEvent(true);
-    }
-    */
+
    private update_end_time():void{
        this.end_time = Date.now();
    }

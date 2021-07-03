@@ -35,7 +35,6 @@ class send_time {
         this.password = "";
     }
     init() {
-        //this.user_auth();
         this.get_editor_event();
     }
     user_auth() {
@@ -77,11 +76,6 @@ class send_time {
     onChange() {
         this.onEvent(false);
     }
-    /*
-    private onSave(): void{
-        this.onEvent(true);
-    }
-    */
     update_end_time() {
         this.end_time = Date.now();
     }
