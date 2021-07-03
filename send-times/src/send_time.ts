@@ -112,7 +112,7 @@ export class send_time{
                     "Content-type":"application/json"
                 }
             }
-            console.log(this.codingTime)
+            //console.log(this.codingTime)
             const url = base_url+this.username
             //console.log(args)
             //console.log(url)
@@ -176,7 +176,7 @@ export class send_time{
     }
 
     private check_break_time(interval: number): boolean{
-        console.log(this.codingTime)
+        //console.log(this.codingTime)
         if(this.total_coding_time() >= interval){
             vscode.window.showInformationMessage("take a break");
             this.codingTime = []
