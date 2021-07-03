@@ -31,6 +31,7 @@ class send_time {
         this.file_type = "";
         this.isCoding = false;
         this.breakTime = [];
+        this.username = "";
     }
     init() {
         //this.user_auth();

@@ -7,7 +7,7 @@ export class send_time{
     private disposable!: vscode.Disposable;
     private isCoding: boolean = false;
     private breakTime: number[] = [];
-    private username: any;
+    private username: string = "";
 
     public init(): void{
         //this.user_auth();
