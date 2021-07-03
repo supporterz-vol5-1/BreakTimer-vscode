@@ -7,14 +7,22 @@ export class send_time{
     private disposable!: vscode.Disposable;
     private isCoding: boolean = false;
     private breakTime: number[] = [];
+    private username: any;
 
     public init(): void{
-        this.user_auth();
+        //this.user_auth();
         this.get_editor_event();
     }
 
-    private user_auth(): void{
+    public async user_auth(): Promise<void>{
         console.log("please log in!")
+        const result = await vscode.window.showInputBox();
+        if(result){
+            this.username = result
+        }else{
+            vscode.window.showWarningMessage("failed to get")
+        }
+        console.log(this.username)
     }
 
     public dispose(): void{

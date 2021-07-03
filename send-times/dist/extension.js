@@ -9,9 +9,18 @@ module.exports = require("vscode");
 
 /***/ }),
 /* 2 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.send_time = void 0;
 const vscode = __webpack_require__(1);
@@ -24,11 +33,21 @@ class send_time {
         this.breakTime = [];
     }
     init() {
-        this.user_auth();
+        //this.user_auth();
         this.get_editor_event();
     }
     user_auth() {
-        console.log("please log in!");
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log("please log in!");
+            const result = yield vscode.window.showInputBox();
+            if (result) {
+                this.username = result;
+            }
+            else {
+                vscode.window.showWarningMessage("failed to get");
+            }
+            console.log(this.username);
+        });
     }
     dispose() {
         this.disposable.dispose();
@@ -124,7 +143,7 @@ exports.send_time = send_time;
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
@@ -161,6 +180,7 @@ function activate(context) {
     });
     context.subscriptions.push(disposable);
     context.subscriptions.push(application);
+    application.user_auth();
     application.init();
 }
 exports.activate = activate;
