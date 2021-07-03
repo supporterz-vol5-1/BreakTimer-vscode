@@ -1,6 +1,7 @@
 import * as vscode from 'vscode'
 const axios = require('axios')
-const base_url = 'localhost/'
+const base_url = 'https://agile-tundra-65071.herokuapp.com/'
+
 
 export class send_time{
     private start_time: number = Date.now();
@@ -14,6 +15,7 @@ export class send_time{
     private username: string = "";
     private password: string = "";
     private interval_time: number = 0;
+    private token: string = "b99bf467f68093508fc15a07da85b634";
     private dict:{[index:string]: string} = {
         "c": "c",
         "cpp": "c++",
@@ -76,6 +78,15 @@ export class send_time{
     }
 
     private get_editor_event(): void{
+        if(!this.file_type){
+            let file= vscode.window.activeTextEditor?.document.fileName;
+            //let file: string = doc.fileName.split("/").reverse()[0];
+            if(file){
+                let type: string = file.split("/").reverse()[0].split(".")[1]
+                type = this.dict[type]
+                this.file_type = type;
+            }
+        }
         let subscription: vscode.Disposable[] = [];
         vscode.window.onDidChangeTextEditorSelection(this.onEvent, this, subscription)
         vscode.window.onDidChangeActiveTextEditor(this.onEvent, this, subscription)
@@ -104,19 +115,26 @@ export class send_time{
             //console.log(this.username)
             //console.log(this.file_type)
             const args = {
-                data:{
-                    worktime: time,
-                    language: this.file_type
+                body:{
+                    filetype: this.file_type,
+                    work_time: time,
+                    token: this.token
                 },
                 headers:{
                     "Content-type":"application/json"
                 }
             }
             //console.log(this.codingTime)
-            const url = base_url+this.username
+            const url = base_url+"api/"+ this.username
             //console.log(args)
-            //console.log(url)
-            //axios.post(url, args)
+            console.log(url)
+            axios.post(url, args)
+            .then(function(res){
+                console.log("data send!")
+            })
+            .catch(function(error){
+                console.log(error, args)
+            })
         }
     }
 

@@ -26,7 +26,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.send_time = void 0;
 const vscode = __webpack_require__(1);
 const axios = __webpack_require__(3);
-const base_url = 'localhost/';
+const base_url = 'https://agile-tundra-65071.herokuapp.com/';
 class send_time {
     constructor() {
         this.start_time = Date.now();
@@ -39,6 +39,7 @@ class send_time {
         this.username = "";
         this.password = "";
         this.interval_time = 0;
+        this.token = "b99bf467f68093508fc15a07da85b634";
         this.dict = {
             "c": "c",
             "cpp": "c++",
@@ -103,6 +104,16 @@ class send_time {
         this.disposable.dispose();
     }
     get_editor_event() {
+        var _a;
+        if (!this.file_type) {
+            let file = (_a = vscode.window.activeTextEditor) === null || _a === void 0 ? void 0 : _a.document.fileName;
+            //let file: string = doc.fileName.split("/").reverse()[0];
+            if (file) {
+                let type = file.split("/").reverse()[0].split(".")[1];
+                type = this.dict[type];
+                this.file_type = type;
+            }
+        }
         let subscription = [];
         vscode.window.onDidChangeTextEditorSelection(this.onEvent, this, subscription);
         vscode.window.onDidChangeActiveTextEditor(this.onEvent, this, subscription);
@@ -131,19 +142,26 @@ class send_time {
             //console.log(this.username)
             //console.log(this.file_type)
             const args = {
-                data: {
-                    worktime: time,
-                    language: this.file_type
+                body: {
+                    filetype: this.file_type,
+                    work_time: time,
+                    token: this.token
                 },
                 headers: {
                     "Content-type": "application/json"
                 }
             };
             //console.log(this.codingTime)
-            const url = base_url + this.username;
+            const url = base_url + "api/" + this.username;
             //console.log(args)
-            //console.log(url)
-            //axios.post(url, args)
+            console.log(url);
+            axios.post(url, args)
+                .then(function (res) {
+                console.log("data send!");
+            })
+                .catch(function (error) {
+                console.log(error, args);
+            });
         }
     }
     update_start_time() {
