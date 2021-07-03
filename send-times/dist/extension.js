@@ -37,6 +37,18 @@ class send_time {
         // private breakTime: number[] = [];
         this.username = "";
         this.password = "";
+        this.dict = {
+            "c": "c",
+            "cpp": "c++",
+            "css": "css",
+            "go": "go",
+            "java": "java",
+            "js": "javascript",
+            "py": "python",
+            "rb": "ruby",
+            "rs": "rust",
+            "ts": "typescript"
+        };
     }
     init() {
         this.get_editor_event();
@@ -135,6 +147,7 @@ class send_time {
             if (doc) {
                 let file = doc.fileName.split("/").reverse()[0];
                 let type = file.split(".")[1];
+                type = this.dict[type];
                 if (file != this.file_name) {
                     this.set_file_type(file, type);
                 }

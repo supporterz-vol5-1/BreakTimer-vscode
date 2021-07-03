@@ -12,7 +12,18 @@ export class send_time{
     // private breakTime: number[] = [];
     private username: string = "";
     private password: string = "";
-
+    private dict:{[index:string]: string} = {
+        "c": "c",
+        "cpp": "c++",
+        "css": "css",
+        "go": "go",
+        "java":"java",
+        "js":"javascript",
+        "py": "python",
+        "rb": "ruby",
+        "rs": "rust",
+        "ts": "typescript"
+    }
     public init(): void{
         this.get_editor_event();
     }
@@ -114,6 +125,7 @@ export class send_time{
             if(doc){
                 let file: string = doc.fileName.split("/").reverse()[0];
                 let type: string = file.split(".")[1]
+                type = this.dict[type]
                 if(file != this.file_name){
                     this.set_file_type(file, type);
                 }
