@@ -23,13 +23,12 @@ class send_time {
         this.isCoding = false;
         this.breakTime = [];
     }
-    /*
-    constructor(centext: vscode.ExtensionContext){
-        this.context = context;
-    }
-    */
     init() {
+        this.user_auth();
         this.get_editor_event();
+    }
+    user_auth() {
+        console.log("please log in!");
     }
     dispose() {
         this.disposable.dispose();
@@ -67,7 +66,7 @@ class send_time {
             if (doc) {
                 let file = doc.fileName;
                 // console.log(file.split("/").reverse()[0].split(".")[1])
-                // ファイルがからの時だけ拡張子を入手する
+                // ファイルjがからの時だけ拡張子を入手する
                 if (!this.file_type)
                     this.file_type = file.split("/").reverse()[0].split(".")[1];
                 if (file && !this.isCoding) {
