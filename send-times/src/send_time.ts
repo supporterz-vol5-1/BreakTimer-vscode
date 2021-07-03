@@ -8,6 +8,7 @@ export class send_time{
     private isCoding: boolean = false;
     private breakTime: number[] = [];
     private username: string = "";
+    private password: string = "";
 
     public init(): void{
         //this.user_auth();
@@ -16,13 +17,26 @@ export class send_time{
 
     public async user_auth(): Promise<void>{
         console.log("please log in!")
-        const result = await vscode.window.showInputBox();
-        if(result){
-            this.username = result
+        const usr = await vscode.window.showInputBox({
+            prompt: "please input username"
+        });
+        if(usr){
+            this.username = usr
         }else{
             vscode.window.showWarningMessage("failed to get")
         }
+        const pass = await vscode.window.showInputBox({
+            password:true,
+            prompt: "please input password"
+        })
+        if(pass){
+            this.password = pass
+        }
+        else{
+            vscode.window.showWarningMessage("failed to get")
+        }
         console.log(this.username)
+        console.log(this.password)
     }
 
     public dispose(): void{

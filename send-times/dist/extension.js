@@ -32,6 +32,7 @@ class send_time {
         this.isCoding = false;
         this.breakTime = [];
         this.username = "";
+        this.password = "";
     }
     init() {
         //this.user_auth();
@@ -40,14 +41,27 @@ class send_time {
     user_auth() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("please log in!");
-            const result = yield vscode.window.showInputBox();
-            if (result) {
-                this.username = result;
+            const usr = yield vscode.window.showInputBox({
+                prompt: "please input username"
+            });
+            if (usr) {
+                this.username = usr;
+            }
+            else {
+                vscode.window.showWarningMessage("failed to get");
+            }
+            const pass = yield vscode.window.showInputBox({
+                password: true,
+                prompt: "please input password"
+            });
+            if (pass) {
+                this.password = pass;
             }
             else {
                 vscode.window.showWarningMessage("failed to get");
             }
             console.log(this.username);
+            console.log(this.password);
         });
     }
     dispose() {
