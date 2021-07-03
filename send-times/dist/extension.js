@@ -87,11 +87,11 @@ class send_time {
     set_interval_time() {
         return __awaiter(this, void 0, void 0, function* () {
             const time = yield vscode.window.showInputBox({
-                prompt: "どのくらい作業しますか？"
+                prompt: "どのくらい作業しますか？(分で入力してください)"
             });
             if (time) {
-                this.interval_time = Number(time);
-                vscode.window.showInformationMessage("作業時間は" + this.interval_time + "分です．");
+                this.interval_time = Number(time) * 60;
+                vscode.window.showInformationMessage("作業時間は" + time + "分です．");
             }
             else {
                 vscode.window.showWarningMessage('failed to get');
@@ -106,7 +106,6 @@ class send_time {
         vscode.window.onDidChangeTextEditorSelection(this.onEvent, this, subscription);
         vscode.window.onDidChangeActiveTextEditor(this.onEvent, this, subscription);
         vscode.workspace.onDidSaveTextDocument(this.checkBreak, this, subscription);
-        //TODO: ファイルを閉じた時に時間をDBに送りたい
         this.disposable = vscode.Disposable.from(...subscription);
     }
     //ファイル名とファイルタイプを更新する
