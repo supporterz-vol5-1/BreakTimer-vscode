@@ -26,7 +26,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.send_time = void 0;
 const vscode = __webpack_require__(1);
 const axios = __webpack_require__(3);
-const base_url = 'localhost';
+const base_url = 'localhost/';
 class send_time {
     constructor() {
         this.start_time = 0;
@@ -111,15 +111,17 @@ class send_time {
             this.update_start_time();
             const args = {
                 data: {
-                    user: this.username,
-                    time: time,
-                    file_type: this.file_type
+                    worktime: time,
+                    language: this.file_type
                 },
                 headers: {
                     "Content-type": "application/json"
                 }
             };
+            const url = base_url + this.username;
             console.log(args);
+            console.log(url);
+            //axios.post(url, args)
         }
     }
     onChange() {

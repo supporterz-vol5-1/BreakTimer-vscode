@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 const axios = require('axios')
-const base_url = 'localhost'
+const base_url = 'localhost/'
 
 export class send_time{
     private start_time: number = 0;
@@ -85,15 +85,17 @@ export class send_time{
             this.update_start_time()
             const args = {
                 data:{
-                    user: this.username,
-                    time: time,
-                    file_type: this.file_type
+                    worktime: time,
+                    language: this.file_type
                 },
                 headers:{
                     "Content-type":"application/json"
                 }
             }
+            const url = base_url+this.username
             console.log(args)
+            console.log(url)
+            //axios.post(url, args)
         }
     }
 
