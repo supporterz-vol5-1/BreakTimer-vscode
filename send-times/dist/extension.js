@@ -54,11 +54,11 @@ class send_time {
     init() {
         this.get_editor_event();
     }
-    user_auth() {
+    user_auth(set_interval) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("please log in!");
             const usr = yield vscode.window.showInputBox({
-                prompt: "please input username"
+                prompt: "ユーザーネームを入力してください"
             });
             if (usr) {
                 this.username = usr;
@@ -68,7 +68,7 @@ class send_time {
             }
             const pass = yield vscode.window.showInputBox({
                 password: true,
-                prompt: "please input password"
+                prompt: "パスワードを入力してください"
             });
             if (pass) {
                 this.password = pass;
@@ -79,7 +79,9 @@ class send_time {
             //console.log(this.username)
             //console.log(this.password)
             //ユーザー認証処理をする
-            this.set_interval_time();
+            if (set_interval) {
+                this.set_interval_time();
+            }
         });
     }
     set_interval_time() {
@@ -89,6 +91,7 @@ class send_time {
             });
             if (time) {
                 this.interval_time = Number(time);
+                vscode.window.showInformationMessage("作業時間は" + this.interval_time + "分です．");
             }
             else {
                 vscode.window.showWarningMessage('failed to get');
@@ -4046,6 +4049,9 @@ var exports = __webpack_exports__;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.deactivate = exports.activate = void 0;
+// The module 'vscode' contains the VS Code extensibility API
+// Import the module and reference it with the alias vscode in your code below
+const vscode = __webpack_require__(1);
 const send_time_1 = __webpack_require__(2);
 var application;
 // this method is called when your extension is activated
@@ -4059,8 +4065,14 @@ function activate(context) {
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with registerCommand
     // The commandId parameter must match the command field in package.json
+    context.subscriptions.push(vscode.commands.registerCommand("send-times.login", function () {
+        application.user_auth(false);
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand("send-times.set_interval", function () {
+        application.set_interval_time();
+    }));
     context.subscriptions.push(application);
-    application.user_auth();
+    application.user_auth(true);
     //application.set_interval_time();
     application.init();
 }

@@ -16,8 +16,12 @@
   "contributes": {
     "commands": [
       {
-        "command": "send-times.helloWorld",
-        "title": "Hello World"
+        "command": "send-times.login",
+        "title": "send-times login"
+      },
+      {
+        "command": "send-times.set_interval",
+        "title": "send-times set interval"
       }
     ]
   },

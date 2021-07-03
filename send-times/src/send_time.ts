@@ -29,10 +29,10 @@ export class send_time{
         this.get_editor_event();
     }
 
-    public async user_auth(): Promise<void>{
+    public async user_auth(set_interval: boolean): Promise<void>{
         console.log("please log in!")
         const usr = await vscode.window.showInputBox({
-            prompt: "please input username"
+            prompt: "ユーザーネームを入力してください"
         });
         if(usr){
             this.username = usr
@@ -41,7 +41,7 @@ export class send_time{
         }
         const pass = await vscode.window.showInputBox({
             password:true,
-            prompt: "please input password"
+            prompt: "パスワードを入力してください"
         })
         if(pass){
             this.password = pass
@@ -52,8 +52,9 @@ export class send_time{
         //console.log(this.username)
         //console.log(this.password)
         //ユーザー認証処理をする
-
-        this.set_interval_time();
+        if(set_interval){
+            this.set_interval_time();
+        }
     }
 
     public async set_interval_time():Promise<void>{
@@ -62,6 +63,7 @@ export class send_time{
         });
         if(time){
             this.interval_time = Number(time);
+            vscode.window.showInformationMessage("作業時間は"+this.interval_time+"分です．")
         }
         else{
             vscode.window.showWarningMessage('failed to get')
