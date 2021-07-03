@@ -104,9 +104,6 @@ class send_time {
         vscode.window.onDidChangeActiveTextEditor(this.onChange, this, subscription);
         vscode.workspace.onDidSaveTextDocument(this.checkBreak, this, subscription);
         //TODO: ファイルを閉じた時に時間をDBに送りたい
-        //vscode.window.onDidChangeVisibleTextEditors(this.send_data, this, subscription)
-        //console.log(vscode.window.visibleTextEditors)
-        //vscode.workspace.onDidOpenTextDocument(this.send_data, this, subscription)
         this.disposable = vscode.Disposable.from(...subscription);
     }
     set_file_type(file_name, file_type) {
@@ -119,10 +116,10 @@ class send_time {
     send_data() {
         const time = this.get_elapsed_time();
         if (time != 0) {
-            console.log("file has changed");
-            console.log(time);
-            console.log(this.username);
-            console.log(this.file_type);
+            //console.log("file has changed")
+            //console.log(time)
+            //console.log(this.username)
+            //console.log(this.file_type)
             this.update_start_time();
             const args = {
                 data: {
