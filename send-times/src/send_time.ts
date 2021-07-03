@@ -34,8 +34,9 @@ export class send_time{
         else{
             vscode.window.showWarningMessage("failed to get")
         }
-        console.log(this.username)
-        console.log(this.password)
+        //console.log(this.username)
+        //console.log(this.password)
+        //ユーザー認証処理をする
     }
 
     public dispose(): void{
@@ -47,7 +48,16 @@ export class send_time{
         vscode.window.onDidChangeTextEditorSelection(this.onChange, this, subscription)
         vscode.window.onDidChangeActiveTextEditor(this.onChange, this, subscription)
         vscode.workspace.onDidSaveTextDocument(this.checkBreak, this, subscription)
+        //TODO: ファイルを閉じた時に時間をDBに送りたい
+        //vscode.window.onDidChangeVisibleTextEditors(this.send_data, this, subscription)
+        //console.log(vscode.window.visibleTextEditors)
+        vscode.window.onDidChangeTextEditorSelection(this.send_data, this, subscription)
         this.disposable = vscode.Disposable.from(...subscription)
+    }
+    //送るデータ
+    // 作業時間，フィアルの内容，ユーザー名
+    private send_data(): void{
+        
     }
 
     private onChange(): void{
@@ -72,10 +82,10 @@ export class send_time{
             let doc = editor.document;
             if(doc){
                 let file: string = doc.fileName;
-                // console.log(file.split("/").reverse()[0].split(".")[1])
-                // ファイルjがからの時だけ拡張子を入手する
-                if(!this.file_type)
+                if(!this.file_type){
                     this.file_type = file.split("/").reverse()[0].split(".")[1]
+                }
+                //console.log(this.file_type)
                 if(file && !this.isCoding){
                     this.start_time = Date.now();
                     this.isCoding = true;
@@ -85,10 +95,9 @@ export class send_time{
                 }
             }
         }
-        console.log("start time", this.start_time)
-        console.log("end time", this.end_time)
-        console.log("elapsed time", this.get_elapsed_time())
-        //this.check_break_time(2);
+        //console.log("start time", this.start_time)
+        //console.log("end time", this.end_time)
+        //console.log("elapsed time", this.get_elapsed_time())
     }
     private get_elapsed_time(): number{
         if(this.start_time >= this.end_time)return 0;
