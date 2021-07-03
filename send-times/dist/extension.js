@@ -29,11 +29,12 @@ const axios = __webpack_require__(3);
 const base_url = 'localhost/';
 class send_time {
     constructor() {
-        this.start_time = 0;
-        this.end_time = 0;
+        this.start_time = Date.now();
+        this.end_time = Date.now();
         this.file_type = "";
         this.file_name = "";
         this.isCoding = false;
+        this.codingTime = [];
         // private breakTime: number[] = [];
         this.username = "";
         this.password = "";
@@ -119,13 +120,16 @@ class send_time {
     //送るデータ
     // 作業時間，フィアルの内容，ユーザー名
     send_data() {
+        this.update_end_time();
         const time = this.get_elapsed_time();
         if (time != 0) {
+            this.codingTime.push(time);
+            this.isCoding = false;
+            this.check_break_time(this.interval_time);
             //console.log("file has changed")
             //console.log(time)
             //console.log(this.username)
             //console.log(this.file_type)
-            this.update_start_time();
             const args = {
                 data: {
                     worktime: time,
@@ -135,12 +139,12 @@ class send_time {
                     "Content-type": "application/json"
                 }
             };
+            console.log(this.codingTime);
             const url = base_url + this.username;
-            console.log(args);
-            console.log(url);
+            //console.log(args)
+            //console.log(url)
             //axios.post(url, args)
         }
-        this.isCoding = false;
     }
     update_start_time() {
         this.start_time = Date.now();
@@ -151,12 +155,9 @@ class send_time {
     //ファイルが保存された時，作業時間の評価をする
     checkBreak() {
         this.update_end_time();
-        if (this.check_break_time(this.interval_time)) {
-            vscode.window.showInformationMessage("take a break");
-            //this.breakTime.push(this.get_elapsed_time());
-            //console.log(this.breakTime)
-        }
-        console.log("elapsed time", this.get_elapsed_time());
+        this.codingTime.push(this.get_elapsed_time());
+        this.update_start_time();
+        this.check_break_time(this.interval_time);
     }
     //文字が入力された時とか，エディタ側で操作した時に実行される
     onEvent() {
@@ -192,10 +193,18 @@ class send_time {
         if (this.start_time >= this.end_time)
             return 0;
         //秒で返す
+        //作業時間を貯める配列の作業時間を合計したものの合計値にしたい
         return (this.end_time - this.start_time) / 1000;
     }
+    total_coding_time() {
+        let total = this.codingTime.reduce((sum, element) => sum + element, 0);
+        return total;
+    }
     check_break_time(interval) {
-        if (this.get_elapsed_time() >= interval) {
+        console.log(this.codingTime);
+        if (this.total_coding_time() >= interval) {
+            vscode.window.showInformationMessage("take a break");
+            this.codingTime = [];
             return true;
         }
         else {
