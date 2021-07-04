@@ -24,6 +24,11 @@ export function activate(context: vscode.ExtensionContext) {
 			application.set_interval_time();
 		})
 	)
+	context.subscriptions.push(
+		vscode.commands.registerCommand("send-times.register", function(){
+			application.register_user();
+		})
+	)
 	context.subscriptions.push(application);
 	application.user_auth(true);
 	//application.set_interval_time();

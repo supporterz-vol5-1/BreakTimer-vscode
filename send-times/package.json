@@ -22,6 +22,10 @@
       {
         "command": "send-times.set_interval",
         "title": "send-times set interval"
+      },
+      {
+        "command": "send-times.register",
+        "title": "send-times register new user"
       }
     ]
   },

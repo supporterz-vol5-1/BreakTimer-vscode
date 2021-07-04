@@ -32,6 +32,31 @@ export class send_time{
         this.get_editor_event();
     }
 
+    public async register_user():Promise<void>{
+        var new_user:string = "";
+        const register_usr = await vscode.window.showInputBox({
+            prompt:"登録するユーザーネームを入力してください"
+        });
+        if(register_usr){
+            //console.log(register_usr);
+            new_user = register_usr;
+        }else{
+            vscode.window.showWarningMessage("failed to get")
+        }
+        const url = base_url + "api/register/"+register_usr;
+        console.log(url)
+        axios.get(url).then((res) =>{
+            console.log("authenticated")
+            console.log(res)
+            this.token = res.token;
+            this.username = new_user;
+        }).catch((err) =>{
+            //これをウィンドウでだしたいな
+            console.log('error')
+            console.log(err)
+        })
+    }
+
     public async user_auth(set_interval: boolean): Promise<void>{
         console.log("please log in!")
         const usr = await vscode.window.showInputBox({
