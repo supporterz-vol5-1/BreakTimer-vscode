@@ -64,22 +64,10 @@ export class send_time{
         });
         if(usr){
             this.username = usr
+            console.log(usr)
         }else{
             vscode.window.showWarningMessage("failed to get")
         }
-        const pass = await vscode.window.showInputBox({
-            password:true,
-            prompt: "パスワードを入力してください"
-        })
-        if(pass){
-            this.password = pass
-        }
-        else{
-            vscode.window.showWarningMessage("failed to get")
-        }
-        //console.log(this.username)
-        //console.log(this.password)
-        //ユーザー認証処理をする
         if(set_interval){
             this.set_interval_time();
         }
